@@ -12,54 +12,60 @@ public class Main {
     public static void main(String[] args) {
         Scanner inputLine = new Scanner(System.in);
         inputLine.useLocale(Locale.US);
-        System.out.println("Введите выражение: ");
+        System.out.print("Введите выражение в формате a + b: ");
         String expression = inputLine.nextLine();
 
         try {
             String result = calc(expression);
             System.out.println(result);
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
     public static String calc(String input) {
         String[] splittedExpression = input.split(" ");
-        String operator = splittedExpression[1];
-        String preFirstNum = splittedExpression[0];
-        String preSecondNum = splittedExpression[2];
 
-        if (isArabicExpression(splittedExpression)) {
-            int firstNum = Integer.parseInt(splittedExpression[0]);
-            int secondNum = Integer.parseInt(splittedExpression[2]);
+        if (splittedExpression.length == 3) {
 
-            if (isValidArabicInput(firstNum, secondNum)) {
-                return String.valueOf(calculation(firstNum, secondNum, operator));
-            }
+            String operator = splittedExpression[1];
+            String preFirstNum = splittedExpression[0];
+            String preSecondNum = splittedExpression[2];
 
-        } else if (isRomeExpression(splittedExpression)) {
-            if (isValidRomeInput(preFirstNum, preSecondNum)) {
-                int firstNumIndex = Arrays.asList(TEN_ROME_SYMBOLS).indexOf(preFirstNum) + 1;
-                int secondNumIndex = Arrays.asList(TEN_ROME_SYMBOLS).indexOf(preSecondNum) + 1;
-                int romePreResult = calculation(firstNumIndex, secondNumIndex, operator);
-                return romeConversion(romePreResult);
+            if (isArabicExpression(input)) {
+                int firstNum = Integer.parseInt(splittedExpression[0]);
+                int secondNum = Integer.parseInt(splittedExpression[2]);
+
+                if (isValidArabicInput(firstNum, secondNum)) {
+                    return String.valueOf(calculation(firstNum, secondNum, operator));
+                }
+
+            } else if (isRomeExpression(input)) {
+                if (isValidRomeInput(preFirstNum, preSecondNum)) {
+                    int firstNumIndex = Arrays.asList(TEN_ROME_SYMBOLS).indexOf(preFirstNum) + 1;
+                    int secondNumIndex = Arrays.asList(TEN_ROME_SYMBOLS).indexOf(preSecondNum) + 1;
+                    int romePreResult = calculation(firstNumIndex, secondNumIndex, operator);
+                    if (romePreResult > 0) {
+                        return romeConversion(romePreResult);
+                    }
+
+                }
             }
         }
-
         throw new IllegalArgumentException("Введено некорректное значение");
     }
 
-    private static boolean isArabicExpression(String[] expression) {
+    private static boolean isArabicExpression(String expression) {
         String arabicRegex = "\\d{1,2} [+-/*] \\d{1,2}";
         Pattern arabicPattern = Pattern.compile(arabicRegex);
-        Matcher arabicMatcher = arabicPattern.matcher(String.join(" ", expression));
+        Matcher arabicMatcher = arabicPattern.matcher(expression);
         return arabicMatcher.matches();
     }
 
-    private static boolean isRomeExpression(String[] expression) {
+    private static boolean isRomeExpression(String expression) {
         String romeRegex = "[IVX]{1,4} [+-/*] [IVX]{1,4}";
         Pattern romePattern = Pattern.compile(romeRegex);
-        Matcher romeMatcher = romePattern.matcher(String.join(" ", expression));
+        Matcher romeMatcher = romePattern.matcher(expression);
         return romeMatcher.matches();
     }
 
