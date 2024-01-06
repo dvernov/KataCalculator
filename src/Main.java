@@ -55,25 +55,25 @@ public class Main {
         throw new IllegalArgumentException("Введено некорректное значение");
     }
 
-    private static boolean isArabicExpression(String expression) {
+    public static boolean isArabicExpression(String expression) {
         String arabicRegex = "\\d{1,2} [+-/*] \\d{1,2}";
         Pattern arabicPattern = Pattern.compile(arabicRegex);
         Matcher arabicMatcher = arabicPattern.matcher(expression);
         return arabicMatcher.matches();
     }
 
-    private static boolean isRomeExpression(String expression) {
+    public static boolean isRomeExpression(String expression) {
         String romeRegex = "[IVX]{1,4} [+-/*] [IVX]{1,4}";
         Pattern romePattern = Pattern.compile(romeRegex);
         Matcher romeMatcher = romePattern.matcher(expression);
         return romeMatcher.matches();
     }
 
-    private static boolean isValidArabicInput(int firstNum, int secondNum) {
+    public static boolean isValidArabicInput(int firstNum, int secondNum) {
         return firstNum > 0 && firstNum <= 10 && secondNum > 0 && secondNum <= 10;
     }
 
-    private static boolean isValidRomeInput(String preFirstNum, String preSecondNum) {
+    public static boolean isValidRomeInput(String preFirstNum, String preSecondNum) {
         return Arrays.asList(TEN_ROME_SYMBOLS).contains(preFirstNum) && Arrays.asList(TEN_ROME_SYMBOLS).contains(preSecondNum);
     }
 
